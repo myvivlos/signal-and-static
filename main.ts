@@ -1,3 +1,8 @@
+// Signal & Static — shortwave radio-tuning arcade game across three stations:
+//   1. STN-01 VALE RELAY (Lowland Weather Band)
+//   2. STN-02 IRON RIDGE (High-Pass Ionosphere)
+//   3. STN-03 DEADSECTOR-9 (Solar Storm Horizon)
+//
 // A working best-game-01 entry (Node 22, standard library only): the game is this directory's
 // game/ folder, plain static files a desktop browser loads offline (game/index.html and its ES
 // modules, no library and no network request), and the program hands it in. It copies game/ and
@@ -17,8 +22,16 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-game.ts';
 
+const GAME_NAME = 'Signal & Static';
+const GAME_VERSION = '1.0.0';
+
 const here = fileURLToPath(new URL('.', import.meta.url));
 const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+
+const gameEntry = join(here, 'game', 'index.html');
+if (!existsSync(gameEntry)) {
+  throw new Error(`Missing required game entry file: ${gameEntry}`);
+}
 
 mkdirSync(out, { recursive: true });
 cpSync(join(here, 'game'), join(out, 'game'), { recursive: true });
@@ -39,3 +52,5 @@ writeFileSync(
     game_path_max_bytes: 1000,
   }),
 );
+
+console.log(`handed in ${GAME_NAME} v${GAME_VERSION}`);
